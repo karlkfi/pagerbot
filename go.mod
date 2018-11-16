@@ -1,7 +1,7 @@
-module github.com/yosmudge/pagerbot
+module github.com/karlkfi/pagerbot
 
 require (
-	github.com/PagerDuty/go-pagerduty v0.0.0-20180821050606-635c5ce27149
+	github.com/PagerDuty/go-pagerduty v0.0.0-20181104233218-fe8f9c4593d0
 	github.com/Sirupsen/logrus v0.0.0-20160601113210-f3cfb454f4c2
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect

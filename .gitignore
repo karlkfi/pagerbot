@@ -1,5 +1,4 @@
 /pagerbot
 /outputs
-.git-crypt.key
 .ci-runner.env
 dist/

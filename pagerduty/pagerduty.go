@@ -1,7 +1,9 @@
 package pagerduty
 
 import (
+	"fmt"
 	"github.com/PagerDuty/go-pagerduty"
+	log "github.com/Sirupsen/logrus"
 )
 
 type Api struct {
@@ -23,8 +25,10 @@ func New(key string, org string) (*Api, error) {
 
 	_, err := a.client.ListSchedules(pagerduty.ListSchedulesOptions{})
 	if err != nil {
-		return &a, err
+		return &a, fmt.Errorf("Failed to list on-call schedules: %v", err)
 	}
+
+	log.Info("Authenticated with PagerDuty")
 
 	return &a, nil
 }

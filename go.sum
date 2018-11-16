@@ -1,5 +1,7 @@
 github.com/PagerDuty/go-pagerduty v0.0.0-20180821050606-635c5ce27149 h1:txbpP8qPBR7ek8CmKtkVUwjdSAq7ql+6+3AVaT2pMyI=
 github.com/PagerDuty/go-pagerduty v0.0.0-20180821050606-635c5ce27149/go.mod h1:6hH58nzwYc9mw+TPyM1anW0ivbI0ti4lYc+ZBaKmWts=
+github.com/PagerDuty/go-pagerduty v0.0.0-20181104233218-fe8f9c4593d0 h1:okO94JirzbcMIAH5z1wtWySIXEA/Q48VzOB1fpN6Who=
+github.com/PagerDuty/go-pagerduty v0.0.0-20181104233218-fe8f9c4593d0/go.mod h1:6hH58nzwYc9mw+TPyM1anW0ivbI0ti4lYc+ZBaKmWts=
 github.com/Sirupsen/logrus v0.0.0-20160601113210-f3cfb454f4c2 h1:7K2nV/afJDrAD2nHgYaf4qdd+oTcopm7PQqVLty19Dw=
 github.com/Sirupsen/logrus v0.0.0-20160601113210-f3cfb454f4c2/go.mod h1:rmk17hk6i8ZSAJkSDa7nOxamrG+SP4P0mm+DAvExv4U=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

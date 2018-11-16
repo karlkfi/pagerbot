@@ -2,13 +2,11 @@
 
 Update your Slack user groups based on your PagerDuty Schedules.
 
-At [Songkick](https://www.songkick.com/), we use PagerDuty for managing our on call schedules. We also have a Slack user group pointing to the people currently on call, so anyone can ping them to alert them of any problems. But updating those user groups every week is both slightly boring, and easy to forget. So when you're working with two services that have APIs, why not automate it?
+Provided with API credentials and some configuration, PagerBot will automatically update Slack user group membership and post a message to channels you select informing everyone who's currently on the rotation.
 
-PagerBot is a simple program to do this. Provided with your PagerDuty and Slack API credentials, and some simple configuration, it will update the usergroups automatically, as well as posting a message to channels you select informing everyone who's currently on the rota.
+# Build
 
-# Installation
-
-We use goenv so:
+We use [goenv](https://github.com/syndbg/goenv) so:
 
 `goenv local`
 
@@ -16,9 +14,22 @@ Then build
 
 `go build`
 
-You should have a nice `pagerbot` binary ready to go. You can also download prebuild binaries from the [releases](https://github.com/YoSmudge/pagerbot/releases) page.
+You should have a nice `pagerbot` binary ready to go. You can also download prebuild binaries from the [releases](https://github.com/karlkfi/pagerbot/releases) page.
 
-# Configuration
+# Slack Setup
+
+1. [Create a Slack App](https://api.slack.com/apps)
+2. Configure the App Scopes under `OAuth & Permissions`
+3. Install the App and copy the `OAuth Access Token` (requires workspace admin)
+4. Write the token to `echo "SLACK_TOKEN=<token>" >> .ci-runner.env`
+
+# PagerDuty Setup
+
+1. [Create a read-only PagerDuty API Key](https://support.pagerduty.com/docs/using-the-api#section-generating-an-api-key) (requires account admin)
+2. Write the key `echo PAGERDUTY_KEY="<key>" >> .ci-runner.env`
+3. Write the org name `echo PAGERDUTY_ORG="<org>" >> .ci-runner.env`
+
+# Config
 
 A basic configuration file will look like
 
@@ -54,3 +65,11 @@ Once done, you can run PagerBot with `./pagerbot --config /path/to/config.yml`
 It's recommended to run PagerBot under Upstart or some other process manager.
 
 N.B. PagerBot matches PagerDuty users to Slack users by their email addresses, so your users must have the same email address in Slack as in PagerDuty. PagerBot will log warnings for any users it finds in PagerDuty but not in Slack.
+
+# Deploy
+
+```
+make build
+sudo docker build -t karlkfi/pagerbot:latest .
+sudo docker run --env-file .ci-runner.env karlkfi/pagerbot:latest
+```
