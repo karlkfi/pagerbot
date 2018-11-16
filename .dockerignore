@@ -1,1 +1,3 @@
 .git-crypt.key
+.secret-kubernetes.yml
+.ci-runner.env

@@ -26,8 +26,8 @@ You should have a nice `pagerbot` binary ready to go. You can also download preb
 # PagerDuty Setup
 
 1. [Create a read-only PagerDuty API Key](https://support.pagerduty.com/docs/using-the-api#section-generating-an-api-key) (requires account admin)
-2. Write the key `echo PAGERDUTY_KEY="<key>" >> .ci-runner.env`
-3. Write the org name `echo PAGERDUTY_ORG="<org>" >> .ci-runner.env`
+2. Write the key `echo "PAGERDUTY_KEY=<key>" >> .ci-runner.env`
+3. Write the org name `echo "PAGERDUTY_ORG=<org>" >> .ci-runner.env`
 
 # Config
 
@@ -69,7 +69,23 @@ N.B. PagerBot matches PagerDuty users to Slack users by their email addresses, s
 # Deploy
 
 ```
-make build
-sudo docker build -t karlkfi/pagerbot:latest .
-sudo docker run --env-file .ci-runner.env karlkfi/pagerbot:latest
+sudo docker build -t gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest .
+sudo docker run --env-file .ci-runner.env gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest
+
+kubeenv <namespace>
+
+kubectl create -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: pagerbot-secrets
+type: Opaque
+data:
+  slack-token: <base64-secret>
+  pagerduty-key: <base64-secret>
+  pagerduty-org: <base64-secret>
+EOF
+
+kubectl create -f pagerbot-kubernetes.yml
+
 ```
