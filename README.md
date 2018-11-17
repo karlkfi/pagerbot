@@ -41,12 +41,12 @@ You can also download pre-build binaries from the
 
 1. [Create a Slack App](https://api.slack.com/apps)
 2. Configure the App Scopes under `OAuth & Permissions`:
-  - Send messages as PagerBot (chat:write:bot)
-  - Post to specific channels in Slack (incoming-webhook)
-  - Access basic information about the workspace’s User Groups (usergroups:read)
-  - Change user’s User Groups (usergroups:write)
-  - Access your workspace’s profile information (users:read)
-  - View email addresses of people on this workspace (users:read.email)
+    - Send messages as PagerBot (chat:write:bot)
+    - Post to specific channels in Slack (incoming-webhook)
+    - Access basic information about the workspace’s User Groups (usergroups:read)
+    - Change user’s User Groups (usergroups:write)
+    - Access your workspace’s profile information (users:read)
+    - View email addresses of people on this workspace (users:read.email)
 3. Install the App and copy the `OAuth Access Token` (requires workspace admin)
 4. Save the token `echo "SLACK_TOKEN=<token>" >> .secrets.env`
 
