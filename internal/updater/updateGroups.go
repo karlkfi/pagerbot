@@ -3,8 +3,8 @@ package updater
 import (
 	"fmt"
 	log "github.com/Sirupsen/logrus"
-	"github.com/karlkfi/pagerbot/config"
-	"github.com/karlkfi/pagerbot/pagerduty"
+	"github.com/karlkfi/pagerbot/internal/config"
+	"github.com/karlkfi/pagerbot/internal/pagerduty"
 	"reflect"
 	"sort"
 	"strings"

@@ -4,15 +4,16 @@ import (
 	"os"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/karlkfi/pagerbot/config"
-	"github.com/karlkfi/pagerbot/updater"
+	"github.com/karlkfi/pagerbot/internal/config"
+	"github.com/karlkfi/pagerbot/internal/updater"
 	"github.com/voxelbrain/goptions"
 )
 
 type options struct {
 	Verbose bool          `goptions:"-v, --verbose, description='Log verbosely'"`
 	Help    goptions.Help `goptions:"-h, --help, description='Show help'"`
-	Config  string        `goptions:"-c, --config, description='Config Yaml file to use'"`
+	Config  string        `goptions:"-c, --config, description='Path to yaml config file'"`
+	EnvFile string        `goptions:"-e, --env-file, description='Path to environment variable file'"`
 }
 
 func main() {
@@ -32,7 +33,7 @@ func main() {
 
 	log.Debug("Logging verbosely!")
 
-	err := config.Load(parsedOptions.Config)
+	err := config.Load(parsedOptions.Config, parsedOptions.EnvFile)
 	if err == nil {
 		err = config.Config.Validate()
 	}

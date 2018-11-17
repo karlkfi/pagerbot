@@ -2,7 +2,7 @@ package updater
 
 import (
 	log "github.com/Sirupsen/logrus"
-	"github.com/karlkfi/pagerbot/config"
+	"github.com/karlkfi/pagerbot/internal/config"
 )
 
 // Updates the schedules from Pagerduty, check that all schedules listed

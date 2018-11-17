@@ -2,32 +2,55 @@
 
 Update your Slack user groups based on your PagerDuty Schedules.
 
-Provided with API credentials and some configuration, PagerBot will automatically update Slack user group membership and post a message to channels you select informing everyone who's currently on the rotation.
+Provided with API credentials and some configuration, PagerBot will
+automatically update Slack user group membership and post a message to channels
+you select informing everyone who's currently on the rotation.
 
-# Build
+# Local Build
 
-We use [goenv](https://github.com/syndbg/goenv) so:
+Use [goenv](https://github.com/syndbg/goenv) to install dependencies:
 
 `goenv local`
 
-Then build
+Compile the `pagerbot` binary:
 
 `go build`
 
-You should have a nice `pagerbot` binary ready to go. You can also download prebuild binaries from the [releases](https://github.com/karlkfi/pagerbot/releases) page.
+You should have a nice `pagerbot` binary ready to go.
+
+# Binary Releases
+
+Cross-compiling can be done with [gox](https://github.com/mitchellh/gox):
+
+```
+# install gox
+go get github.com/mitchellh/gox
+
+# build binaries
+gox -osarch "linux/amd64" -ldflags "-extldflags '-static'" -output "dist/{{.OS}}_{{.Arch}}/pagerbot"
+```
+
+You can also download pre-build binaries from the
+[releases](https://github.com/karlkfi/pagerbot/releases) page.
 
 # Slack Setup
 
 1. [Create a Slack App](https://api.slack.com/apps)
-2. Configure the App Scopes under `OAuth & Permissions`
+2. Configure the App Scopes under `OAuth & Permissions`:
+  - Send messages as PagerBot (chat:write:bot)
+  - Post to specific channels in Slack (incoming-webhook)
+  - Access basic information about the workspace’s User Groups (usergroups:read)
+  - Change user’s User Groups (usergroups:write)
+  - Access your workspace’s profile information (users:read)
+  - View email addresses of people on this workspace (users:read.email)
 3. Install the App and copy the `OAuth Access Token` (requires workspace admin)
-4. Write the token to `echo "SLACK_TOKEN=<token>" >> .ci-runner.env`
+4. Save the token `echo "SLACK_TOKEN=<token>" >> .secrets.env`
 
 # PagerDuty Setup
 
 1. [Create a read-only PagerDuty API Key](https://support.pagerduty.com/docs/using-the-api#section-generating-an-api-key) (requires account admin)
-2. Write the key `echo "PAGERDUTY_KEY=<key>" >> .ci-runner.env`
-3. Write the org name `echo "PAGERDUTY_ORG=<org>" >> .ci-runner.env`
+2. Save the key `echo "PAGERDUTY_KEY=<key>" >> .secrets.env`
+3. Save the org name `echo "PAGERDUTY_ORG=<org>" >> .secrets.env`
 
 # Config
 
@@ -35,57 +58,76 @@ A basic configuration file will look like
 
 ```yaml
 api_keys:
-  slack: "abcd123"
+  slack: "$SLACK_TOKEN" # Slack OAuth Access Token
   pagerduty:
-    org: "songkick"
-    key: "qwerty567"
+    org: "$PAGERDUTY_ORG" # PagerDuty subdomain
+    key: "$PAGERDUTY_KEY" # PagerDuty API key
 
 groups:
-  - name: firefighter
-    schedules:
-      - PAAAAAA
-      - PBBBBBB
-    update_message:
-      message: ":fire_engine: Your firefighters are %s :fire_engine:"
-      channels:
-        - general
-  - name: fielder
-    schedules:
-      - PCCCCCC
-    update_message:
-      message: "Your :baseball: TechOps @Fielder :baseball: this week is %s"
-      channels:
-        - team-engineering
+- name: firefighter # name of the Slack user group to update
+  schedules: # one or more PagerDuty schedule IDs
+  - PAAAAAA
+  - PBBBBBB
+  update_message: # optional update message (%s is a comma delimited members list)
+    message: ":fire_engine: @paas-oncall shift change: %s :fire_engine:"
+    channels: # one or more channels to post the message to
+    - paas
 ```
 
-The configuration should be fairly straightforward, under API keys provide your Slack and Pagerduty keys. Under groups configure the Slack groups you'd like to update. Schedules is a list of PagerDuty schedule IDs, update_message is the message you'd like to post, and the channels you'd like to post them in.
+This config specifies the use of environment variables which pagerbot will
+interpolate at runtime, allowing you to inject secrets and env vars.
 
-Once done, you can run PagerBot with `./pagerbot --config /path/to/config.yml`
+Specify the config when launching pagerbot:
+
+```
+./pagerbot --config /path/to/config.yml --env-file /path/to/.secrets.env
+```
 
 It's recommended to run PagerBot under Upstart or some other process manager.
 
-N.B. PagerBot matches PagerDuty users to Slack users by their email addresses, so your users must have the same email address in Slack as in PagerDuty. PagerBot will log warnings for any users it finds in PagerDuty but not in Slack.
+N.B. PagerBot matches PagerDuty users to Slack users by their email addresses,
+so your users must have the same email address in Slack as in PagerDuty.
+PagerBot will log warnings for any users it finds in PagerDuty but not in Slack.
 
 # Deploy
 
+It's recommended to run PagerBot using a package manager or container platform.
+
+## Docker Image
+
+The included Dockerfile uses a multi-stage build to compile pagebot and package
+it in a small alpine-based Docker image for use in production:
+
 ```
+# build and tag image
 sudo docker build -t gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest .
-sudo docker run --env-file .ci-runner.env gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest
 
-kubeenv <namespace>
+# run locally in docker
+sudo docker run --env-file .secrets.env gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest
 
-kubectl create -f - <<EOF
+# push to a docker image registry
+sudo docker push gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest
+```
+
+## Kubernetes
+
+Once a Docker image is built, it can be deployed to Kubernetes using
+encrypted secret management:
+
+```
+# interpolate and base64 encode the secrets into a k8s secret
+kubectl apply -f - <<EOF
 apiVersion: v1
 kind: Secret
 metadata:
   name: pagerbot-secrets
 type: Opaque
 data:
-  slack-token: <base64-secret>
-  pagerduty-key: <base64-secret>
-  pagerduty-org: <base64-secret>
+  slack-token: "$(grep 'SLACK_TOKEN' .secrets.env | cut -d'=' -f2 | base64 -w0)"
+  pagerduty-key: "$(grep 'PAGERDUTY_KEY' .secrets.env | cut -d'=' -f2 | base64)"
+  pagerduty-org: "$(grep 'PAGERDUTY_ORG' .secrets.env | cut -d'=' -f2 | base64)"
 EOF
 
-kubectl create -f pagerbot-kubernetes.yml
-
+# create pagerbot deployment
+kubectl apply -f deployments/kubernetes/deployment.yml
 ```

@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pagerbot
+spec:
+  containers:
+  - name : pagerbot
+    image: gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    env:
+    - name: SLACK_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: pagerbot-secrets
+          key: slack-token
+    - name: PAGERDUTY_KEY
+      valueFrom:
+        secretKeyRef:
+          name: pagerbot-secrets
+          key: pagerduty-key
+    - name: PAGERDUTY_ORG
+      valueFrom:
+        secretKeyRef:
+          name: pagerbot-secrets
+          key: pagerduty-org

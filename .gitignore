@@ -1,5 +1,5 @@
 /pagerbot
 /outputs
-/.secret-kubernetes.yml
-/.ci-runner.env
 /dist
+.secret.yml
+.secrets.env

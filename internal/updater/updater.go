@@ -1,9 +1,9 @@
 package updater
 
 import (
-	"github.com/karlkfi/pagerbot/config"
-	"github.com/karlkfi/pagerbot/pagerduty"
-	"github.com/karlkfi/pagerbot/slack"
+	"github.com/karlkfi/pagerbot/internal/config"
+	"github.com/karlkfi/pagerbot/internal/pagerduty"
+	"github.com/karlkfi/pagerbot/internal/slack"
 	"sync"
 	"time"
 )

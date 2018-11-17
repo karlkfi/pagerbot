@@ -1,7 +1,7 @@
 package updater
 
 import (
-	"github.com/karlkfi/pagerbot/pagerduty"
+	"github.com/karlkfi/pagerbot/internal/pagerduty"
 )
 
 type ScheduleList struct {
