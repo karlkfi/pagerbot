@@ -6,6 +6,10 @@ Provided with API credentials and some configuration, PagerBot will
 automatically update Slack user group membership and post a message to channels
 you select informing everyone who's currently on the rotation.
 
+PagerBot matches PagerDuty users to Slack users by their email addresses,
+so your users must have the same email address in Slack as in PagerDuty.
+PagerBot will log warnings for any users it finds in PagerDuty but not in Slack.
+
 # Local Build
 
 Use [goenv](https://github.com/syndbg/goenv) to install dependencies:
@@ -82,12 +86,6 @@ Specify the config when launching pagerbot:
 ```
 ./pagerbot --config /path/to/config.yml --env-file /path/to/.secrets.env
 ```
-
-It's recommended to run PagerBot under Upstart or some other process manager.
-
-N.B. PagerBot matches PagerDuty users to Slack users by their email addresses,
-so your users must have the same email address in Slack as in PagerDuty.
-PagerBot will log warnings for any users it finds in PagerDuty but not in Slack.
 
 # Deploy
 
