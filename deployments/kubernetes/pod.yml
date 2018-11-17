@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
   - name : pagerbot
-    image: gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest
+    image: karlkfi/pagerbot:latest
     resources:
       requests:
         memory: "64Mi"
