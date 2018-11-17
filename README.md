@@ -34,7 +34,7 @@ go get github.com/mitchellh/gox
 gox -osarch "linux/amd64" -ldflags "-extldflags '-static'" -output "dist/{{.OS}}_{{.Arch}}/pagerbot"
 ```
 
-You can also download pre-build binaries from the
+You can also download pre-built binaries from the
 [releases](https://github.com/karlkfi/pagerbot/releases) page.
 
 # Slack Setup
