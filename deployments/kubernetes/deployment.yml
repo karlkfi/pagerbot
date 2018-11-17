@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pagerbot
+  labels:
+    app: pagerbot-dev
+    release: pagerbot-v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pagerbot-dev
+      release: pagerbot-v1
+  template:
+    metadata:
+      labels:
+        app: pagerbot-dev
+        release: pagerbot-v1
+    spec:
+      containers:
+      - name : pagerbot
+        image: gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: SLACK_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: pagerbot-secrets
+              key: slack-token
+        - name: PAGERDUTY_KEY
+          valueFrom:
+            secretKeyRef:
+              name: pagerbot-secrets
+              key: pagerduty-key
+        - name: PAGERDUTY_ORG
+          valueFrom:
+            secretKeyRef:
+              name: pagerbot-secrets
+              key: pagerduty-org

@@ -1,0 +1,16 @@
+---
+api_keys:
+  slack: "$SLACK_TOKEN"
+  pagerduty:
+    org: "$PAGERDUTY_ORG"
+    key: "$PAGERDUTY_KEY"
+
+groups:
+- name: pass-oncall
+  schedules:
+  - "P3DWX7O" # PaaS On-Call Weekly
+  - "PAKT6O4" # PaaS dev On-Call Weekly
+  update_message:
+    message: "Updated @pass-oncall members: %s"
+    channels:
+    - general

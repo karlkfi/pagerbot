@@ -1,5 +1,3 @@
-/pagerbot
-/outputs
-/dist
+.git-crypt.key
 .secret.yml
 .secrets.env
