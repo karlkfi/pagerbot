@@ -98,13 +98,13 @@ it in a small alpine-based Docker image for use in production:
 
 ```
 # build and tag image
-sudo docker build -t gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest .
+docker build -t karlkfi/pagerbot:latest .
 
 # run locally in docker
-sudo docker run --env-file .secrets.env gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest
+docker run --env-file .secrets.env karlkfi/pagerbot:latest
 
 # push to a docker image registry
-sudo docker push gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest
+docker push karlkfi/pagerbot:latest
 ```
 
 ## Kubernetes
@@ -121,9 +121,9 @@ metadata:
   name: pagerbot-secrets
 type: Opaque
 data:
-  slack-token: "$(grep 'SLACK_TOKEN' .secrets.env | cut -d'=' -f2 | base64 -w0)"
-  pagerduty-key: "$(grep 'PAGERDUTY_KEY' .secrets.env | cut -d'=' -f2 | base64)"
-  pagerduty-org: "$(grep 'PAGERDUTY_ORG' .secrets.env | cut -d'=' -f2 | base64)"
+  slack-token: "$(grep 'SLACK_TOKEN' .secrets.env | cut -d'=' -f2 | tr -d '\n' | base64)"
+  pagerduty-key: "$(grep 'PAGERDUTY_KEY' .secrets.env | cut -d'=' -f2 | tr -d '\n' | base64)"
+  pagerduty-org: "$(grep 'PAGERDUTY_ORG' .secrets.env | cut -d'=' -f2 | tr -d '\n' | base64)"
 EOF
 
 # create pagerbot deployment

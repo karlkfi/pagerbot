@@ -4,23 +4,19 @@ metadata:
   name: pagerbot
   labels:
     app: pagerbot-dev
-    release: pagerbot-v1
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: pagerbot-dev
-      release: pagerbot-v1
   template:
     metadata:
       labels:
         app: pagerbot-dev
-        release: pagerbot-v1
     spec:
       containers:
       - name : pagerbot
-        image: gcr.io/cruise-gcr-dev/karlkfi/pagerbot:latest
-        imagePullPolicy: Always
+        image: karlkfi/pagerbot:latest
         resources:
           requests:
             memory: "64Mi"
