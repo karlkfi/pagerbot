@@ -33,7 +33,7 @@ func main() {
 	log.SetFormatter(&log.JSONFormatter{
 		PrettyPrint: parsedOptions.Pretty,
 		FieldMap: log.FieldMap{
-			log.FieldKeyLevel: "serverity", // required for StackDriver GKE parsing
+			log.FieldKeyLevel: "severity", // required for StackDriver GKE parsing
 		},
 		TimestampFormat: "2006-01-02T15:04:05.000000000Z", // nanoseconds
 	})
