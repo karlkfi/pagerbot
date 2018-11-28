@@ -95,6 +95,8 @@ func (u *Updater) updateGroups() {
 			for _, c := range group.UpdateMessage.Channels {
 				u.Slack.PostMessage(c, msgText)
 			}
+		} else {
+			log.WithFields(lf).Info("Group members unchanged")
 		}
 	}
 }
