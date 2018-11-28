@@ -11,6 +11,7 @@ import (
 
 type options struct {
 	Verbose bool          `goptions:"-v, --verbose, description='Log verbosely'"`
+	Pretty  bool          `goptions:"-p, --pretty, description='Log multi-line pretty-print json'"`
 	Help    goptions.Help `goptions:"-h, --help, description='Show help'"`
 	Config  string        `goptions:"-c, --config, description='Path to yaml config file'"`
 	EnvFile string        `goptions:"-e, --env-file, description='Path to environment variable file'"`
@@ -29,8 +30,7 @@ func main() {
 		log.SetLevel(log.InfoLevel)
 	}
 
-	//log.SetFormatter(&log.TextFormatter{FullTimestamp: true})
-	log.SetFormatter(&log.JSONFormatter{PrettyPrint: true})
+	log.SetFormatter(&log.JSONFormatter{PrettyPrint: parsedOptions.Pretty})
 
 	log.Debug("Logging verbosely!")
 
