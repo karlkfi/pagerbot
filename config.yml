@@ -6,11 +6,10 @@ api_keys:
     key: "$PAGERDUTY_KEY"
 
 groups:
-- name: pass-oncall
+- name: paas-oncall
   schedules:
   - "P3DWX7O" # PaaS On-Call Weekly
-  - "PAKT6O4" # PaaS dev On-Call Weekly
   update_message:
-    message: "Updated @pass-oncall members: %s"
+    message: "Updated @paas-oncall members: %s"
     channels:
-    - general
+    - paas

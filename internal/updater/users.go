@@ -12,15 +12,11 @@ type User struct {
 	Email       string
 }
 
-func (u *UserList) ById(id string) *User {
-	var usr *User
-
-	for _, us := range u.users {
-		if us.PagerdutyId == id {
-			usr = us
-			break
+func (u *UserList) ByPagerdutyId(id string) *User {
+	for _, user := range u.users {
+		if user.PagerdutyId == id {
+			return user
 		}
 	}
-
-	return usr
+	return nil
 }

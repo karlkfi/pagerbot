@@ -3,9 +3,9 @@ package main
 import (
 	"os"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/karlkfi/pagerbot/internal/config"
 	"github.com/karlkfi/pagerbot/internal/updater"
+	log "github.com/sirupsen/logrus"
 	"github.com/voxelbrain/goptions"
 )
 
@@ -29,7 +29,8 @@ func main() {
 		log.SetLevel(log.InfoLevel)
 	}
 
-	log.SetFormatter(&log.TextFormatter{FullTimestamp: true})
+	//log.SetFormatter(&log.TextFormatter{FullTimestamp: true})
+	log.SetFormatter(&log.JSONFormatter{PrettyPrint: true})
 
 	log.Debug("Logging verbosely!")
 

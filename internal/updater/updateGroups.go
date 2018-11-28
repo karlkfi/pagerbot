@@ -2,9 +2,9 @@ package updater
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"github.com/karlkfi/pagerbot/internal/config"
 	"github.com/karlkfi/pagerbot/internal/pagerduty"
+	log "github.com/sirupsen/logrus"
 	"reflect"
 	"sort"
 	"strings"
@@ -43,8 +43,8 @@ func (u *Updater) updateGroups() {
 			}
 
 			if activePeriod != nil {
-				lf["userId"] = activePeriod.User
-				usr := u.Users.ById(activePeriod.User)
+				lf["pagerdutyId"] = activePeriod.User
+				usr := u.Users.ByPagerdutyId(activePeriod.User)
 				if usr == nil {
 					log.WithFields(lf).Warning("Could not find user with ID")
 					continue
@@ -54,7 +54,7 @@ func (u *Updater) updateGroups() {
 		}
 
 		lf["scheduleId"] = nil
-		lf["userId"] = nil
+		lf["pagerdutyId"] = nil
 		lf["changeover"] = changeover
 
 		var pdUsers []string

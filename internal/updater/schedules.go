@@ -9,14 +9,10 @@ type ScheduleList struct {
 }
 
 func (s *ScheduleList) ById(id string) *pagerduty.Schedule {
-	var schd *pagerduty.Schedule
-
-	for _, sc := range s.schedules {
-		if sc.Id == id {
-			schd = sc
-			break
+	for _, schedule := range s.schedules {
+		if schedule.Id == id {
+			return schedule
 		}
 	}
-
-	return schd
+	return nil
 }

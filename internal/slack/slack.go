@@ -2,7 +2,7 @@ package slack
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/nlopes/slack"
 )
 

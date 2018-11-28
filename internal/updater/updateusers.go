@@ -1,8 +1,7 @@
 package updater
 
 import (
-	log "github.com/Sirupsen/logrus"
-	"github.com/nlopes/slack"
+	log "github.com/sirupsen/logrus"
 )
 
 // Fetch the users from Pagerduty and slack, and make sure we can match them
@@ -14,42 +13,41 @@ func (u *Updater) updateUsers() {
 	if err != nil {
 		log.WithFields(log.Fields{
 			"error": err,
-		}).Warning("Could not fetch users from Pagerduty")
+		}).Warning("Failed fetching PagerDuty users")
 		return
 	}
+	log.WithFields(log.Fields{
+		"users": pdUsers,
+	}).Debug("Fetched PagerDuty users")
 
-	slackUsers, err := u.Slack.Users()
+	slackUserMap, err := u.Slack.UserMap()
 	if err != nil {
 		log.WithFields(log.Fields{
 			"error": err,
-		}).Warning("Could not fetch users from Slack")
+		}).Warning("Failed fetching Slack users")
 		return
 	}
-
-	// Create a map of slack email -> user for searching
-	slackUserMap := make(map[string]*slack.User)
-	for i, _ := range slackUsers {
-		u := slackUsers[i]
-		slackUserMap[u.Profile.Email] = &u
-	}
+	log.WithFields(log.Fields{
+		"users": slackUserMap,
+	}).Debug("Fetched Slack users")
 
 	var users UserList
-	for _, u := range pdUsers {
-		su, found := slackUserMap[u.Email]
+	for _, pdUser := range pdUsers {
+		slackUser, found := slackUserMap[pdUser.Email]
 		if !found {
 			log.WithFields(log.Fields{
-				"email":       u.Email,
-				"pagerdutyId": u.Id,
+				"email":       pdUser.Email,
+				"pagerdutyId": pdUser.Id,
 			}).Debug("Could not find Slack account for Pagerduty user")
 			continue
 		}
 
 		usr := User{}
-		usr.Name = u.Name
-		usr.SlackId = su.ID
-		usr.PagerdutyId = u.Id
-		usr.SlackName = su.Name
-		usr.Email = u.Email
+		usr.Name = pdUser.Name
+		usr.SlackId = slackUser.Id
+		usr.PagerdutyId = pdUser.Id
+		usr.SlackName = slackUser.Name
+		usr.Email = pdUser.Email
 		users.users = append(users.users, &usr)
 	}
 

@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // Validate the configuration file for sanity

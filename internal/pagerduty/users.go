@@ -1,32 +1,15 @@
 package pagerduty
 
 import (
-	"bytes"
 	"fmt"
-
 	"github.com/PagerDuty/go-pagerduty"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
-
-type Users []User
 
 type User struct {
 	Id    string
 	Name  string
 	Email string
-}
-
-func (u Users) String() string {
-	var buffer bytes.Buffer
-	buffer.WriteString("[\n")
-	for i, user := range u {
-		if i > 0 {
-			buffer.WriteString(",\n")
-		}
-		buffer.WriteString(fmt.Sprintf("  User{ Id:\"%s\", Name:\"%s\", Email:\"%s\" }", user.Id, user.Name, user.Email))
-	}
-	buffer.WriteString("\n]")
-	return buffer.String()
 }
 
 // pdUsers returns a list of PagerDuty users.
@@ -48,6 +31,11 @@ func (a *Api) pdUsers() ([]pagerduty.User, error) {
 		}
 
 		users = append(users, res.Users...)
+		log.WithFields(log.Fields{
+			"pageSize": len(res.Users),
+			"total":    len(users),
+		}).Debug("Recieved page of PagerDuty users")
+
 		listOpts.Offset += pageLimit
 		opts = pagerduty.ListUsersOptions{APIListObject: listOpts}
 
@@ -58,14 +46,13 @@ func (a *Api) pdUsers() ([]pagerduty.User, error) {
 	return users, nil
 }
 
-func (a *Api) Users() (Users, error) {
-	var userList Users
-
+func (a *Api) Users() ([]User, error) {
 	pdUserList, err := a.pdUsers()
 	if err != nil {
-		return userList, err
+		return nil, err
 	}
 
+	userList := make([]User, 0, len(pdUserList))
 	for _, user := range pdUserList {
 		userList = append(userList, User{
 			Id:    user.ID,
@@ -73,10 +60,5 @@ func (a *Api) Users() (Users, error) {
 			Email: user.Email,
 		})
 	}
-
-	log.WithFields(log.Fields{
-		"users": userList,
-	}).Debug("Known PagerDuty Users")
-
 	return userList, nil
 }

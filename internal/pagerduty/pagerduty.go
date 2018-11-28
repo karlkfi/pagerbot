@@ -3,7 +3,7 @@ package pagerduty
 import (
 	"fmt"
 	"github.com/PagerDuty/go-pagerduty"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 type Api struct {
