@@ -30,7 +30,13 @@ func main() {
 		log.SetLevel(log.InfoLevel)
 	}
 
-	log.SetFormatter(&log.JSONFormatter{PrettyPrint: parsedOptions.Pretty})
+	log.SetFormatter(&log.JSONFormatter{
+		PrettyPrint: parsedOptions.Pretty,
+		FieldMap: log.FieldMap{
+			log.FieldKeyLevel: "serverity", // required for StackDriver GKE parsing
+		},
+		TimestampFormat: "2006-01-02T15:04:05.000000000Z", // nanoseconds
+	})
 
 	log.Debug("Logging verbosely!")
 
