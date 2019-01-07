@@ -13,3 +13,19 @@ groups:
     message: "Updated @paas-oncall members: %s"
     channels:
     - paas
+
+- name: bsi-oncall
+  schedules:
+  - "POAD48V" # BSI On-Call Weekly
+  update_message:
+    message: "Updated @bsi-oncall members: %s"
+    channels:
+    - bsi-team
+    
+- name: hydra-oncall
+  schedules:
+  - "P6YS260" # Hydra On-call Weekly
+  update_message:
+    message: "Updated @hydra-oncall members: %s"
+    channels:
+    - hydra-noise
