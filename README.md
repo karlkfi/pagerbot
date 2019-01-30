@@ -12,7 +12,7 @@ PagerBot will log warnings for any users it finds in PagerDuty but not in Slack.
 
 # Docker Image
 
-[![](https://images.microbadger.com/badges/version/karlkfi/pagerbot.svg)](https://cloud.docker.com/repository/docker/karlkfi/pagerbot "Latest Image on DockerHub") [![](https://images.microbadger.com/badges/image/karlkfi/pagerbot.svg)](https://microbadger.com/images/karlkfi/pagerbot "Image Layers")
+[![](https://images.microbadger.com/badges/version/karlkfi/pagerbot.svg)](https://hub.docker.com/r/karlkfi/pagerbot "Latest Image on DockerHub") [![](https://images.microbadger.com/badges/image/karlkfi/pagerbot.svg)](https://microbadger.com/images/karlkfi/pagerbot "Image Layers")
 
 # Local Build
 
