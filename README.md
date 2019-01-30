@@ -10,6 +10,10 @@ PagerBot matches PagerDuty users to Slack users by their email addresses,
 so your users must have the same email address in Slack as in PagerDuty.
 PagerBot will log warnings for any users it finds in PagerDuty but not in Slack.
 
+# Docker Image
+
+[![](https://images.microbadger.com/badges/version/karlkfi/pagerbot.svg)](https://cloud.docker.com/repository/docker/karlkfi/pagerbot "Latest Image on DockerHub") [![](https://images.microbadger.com/badges/image/karlkfi/pagerbot.svg)](https://microbadger.com/images/karlkfi/pagerbot "Image Layers")
+
 # Local Build
 
 Use [goenv](https://github.com/syndbg/goenv) to install dependencies:
