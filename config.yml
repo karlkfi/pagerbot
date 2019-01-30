@@ -6,26 +6,10 @@ api_keys:
     key: "$PAGERDUTY_KEY"
 
 groups:
-- name: paas-oncall
+- name: "myteam-oncall" # Slack Group Name
   schedules:
-  - "P3DWX7O" # PaaS On-Call Weekly
+  - "ABC1234" # PagerDuty Schedule ID
   update_message:
-    message: "Updated @paas-oncall members: %s"
+    message: "Updated @myteam-oncall members: %s" # Update message to send to Slack 
     channels:
-    - paas
-
-- name: bsi-oncall
-  schedules:
-  - "POAD48V" # BSI On-Call Weekly
-  update_message:
-    message: "Updated @bsi-oncall members: %s"
-    channels:
-    - bsi-team
-    
-- name: hydra-oncall
-  schedules:
-  - "P6YS260" # Hydra On-call Weekly
-  update_message:
-    message: "Updated @hydra-oncall members: %s"
-    channels:
-    - hydra-noise
+    - "myteam" # Slack Channel Name
