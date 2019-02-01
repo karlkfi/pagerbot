@@ -30,4 +30,4 @@ COPY config.yml /
 # use non-root user
 USER appuser
 
-CMD ["/go/bin/pagerbot"]
+ENTRYPOINT ["/go/bin/pagerbot"]
