@@ -2,13 +2,14 @@ package updater
 
 import (
 	"fmt"
-	"github.com/karlkfi/pagerbot/internal/config"
-	"github.com/karlkfi/pagerbot/internal/pagerduty"
-	log "github.com/sirupsen/logrus"
 	"reflect"
 	"sort"
 	"strings"
 	"time"
+
+	"github.com/karlkfi/pagerbot/internal/config"
+	"github.com/karlkfi/pagerbot/internal/pagerduty"
+	log "github.com/sirupsen/logrus"
 )
 
 // Ensure all the slack groups are up to date
@@ -49,7 +50,10 @@ func (u *Updater) updateGroups() {
 					log.WithFields(lf).Warning("Could not find user with ID")
 					continue
 				}
-				currentUsers = append(currentUsers, usr)
+				// don't add duplicates (same user in multiple schedules concurrently)
+				if !contains(currentUsers, usr) {
+					currentUsers = append(currentUsers, usr)
+				}
 			}
 		}
 
@@ -99,4 +103,13 @@ func (u *Updater) updateGroups() {
 			log.WithFields(lf).Info("Group members unchanged")
 		}
 	}
+}
+
+func contains(s []*User, e *User) bool {
+	for _, a := range s {
+		if a.PagerdutyId == e.PagerdutyId {
+			return true
+		}
+	}
+	return false
 }

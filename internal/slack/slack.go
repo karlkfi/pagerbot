@@ -2,8 +2,8 @@ package slack
 
 import (
 	"fmt"
-	log "github.com/sirupsen/logrus"
 	"github.com/nlopes/slack"
+	log "github.com/sirupsen/logrus"
 )
 
 type Api struct {
