@@ -1,5 +1,5 @@
 # build image
-FROM golang:1.11.2-alpine3.8 as builder
+FROM golang:1.13.6-alpine3.11 as builder
 RUN apk update && apk add git && apk add ca-certificates
 
 # create non-root user
@@ -15,7 +15,7 @@ RUN go get -d -v
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags="-w -s" -o /go/bin/pagerbot
 
 # distributable image
-FROM alpine:3.8
+FROM alpine:3.11
 
 # copy dependencies
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
